@@ -76,6 +76,21 @@ const linkGet = (req, res) => {
 }
 
 /**
+ * Gets the 20 most frequently accessed links
+ * @param {*} req 
+ * @param {*} res 
+ */
+const top20 = (req, res) => {
+    Link.find(function (err, links){
+        if(err){
+            res.status(422);
+            res.json({'error': err});
+        }
+        res.json(links);
+    }).limit(20).sort({visits:-1});
+}
+
+/**
  * Updates a link by id
  * @param {*} req 
  * @param {*} res 
@@ -141,6 +156,7 @@ const linkDelete = (req, res) => {
 module.exports = {
     linkPost,
     linkGet,
+    top20,
     linkPatch,
     linkDelete
 }
