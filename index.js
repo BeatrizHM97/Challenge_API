@@ -18,7 +18,8 @@ const {
     linkGet,
     linkPatch,
     linkDelete,
-    top20
+    top20,
+    sumVisit
 } = require('./controllers/linkController');
 
 // It is necessary for the request body (POST and PUT methods)
@@ -45,6 +46,7 @@ app.post("/api/links", linkPost);
 app.get("/api/links", linkGet);
 app.get("/api/links/top20", top20);
 app.patch("/api/links", linkPatch);
+app.patch("/api/links/sumVisits", sumVisit);
 app.put("/api/links", linkPatch);
 app.delete("/api/links", linkDelete);
 

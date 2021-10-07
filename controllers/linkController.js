@@ -20,7 +20,7 @@ const linkPost = (req, res) => {
     let link = new Link();
 
     link.url = req.body.url;
-    link.visits = 1;
+    link.visits = 0;
     link.shortcode = generateShortcode(6);
 
     if(link.url){
@@ -34,7 +34,7 @@ const linkPost = (req, res) => {
             }
             res.status(201);
             res.header({
-                'location': `http://localhost:3000/api/links/?is=${link._id}`
+                'location': `http://localhost:3000/api/links/?id=${link._id}`
             });
             res.json(link);
         });
@@ -129,6 +129,38 @@ const linkPatch = (req, res) => {
     }
 }
 
+const sumVisit = (req, res) => {
+    if(req.query && req.query.id){
+        Link.findById(req.query.id, function (err, link){
+            if(err){
+                res.status(422);
+                console.log('Error while queryting the link ', err);
+                res.json({
+                    error: 'Link doesnt eixst'
+                });
+            }
+            link.visits += 1;
+
+            link.save(function (err){
+                if(err){
+                    res.status(422);
+                    console.log('Error while saving the link ', err);
+                    res.json({
+                        error: 'There was an error saving the link'
+                    });
+                }
+                res.status(200);
+                res.json(link);
+            });
+        });
+    } else{
+        res.status(404);
+        res.json({
+            error: 'Link doesnt exist'
+        });
+    }
+}
+
 /**
  * Deletes a link by id
  * @param {*} req 
@@ -158,5 +190,6 @@ module.exports = {
     linkGet,
     top20,
     linkPatch,
+    sumVisit,
     linkDelete
 }
