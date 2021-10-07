@@ -37,6 +37,31 @@ const userPost = (req, res) => {
     }
 }
 
+const login = (req, res) => {
+    let user = new User();
+
+    user.email = req.body.email;
+    user.password = req.body.password;
+
+    if(user.email && user.password){
+        User.find({email:user.email, password:user.password}, function (err, user){
+            if(err) {
+                res.status(404);
+                console.log('error while queryting the user', err)
+                res.json({
+                    error: 'User doesnt exist'
+                });
+            }
+            res.json(user);
+        });
+    }else{
+        res.status(422);
+        res.json({
+            error: 'No valid data provided for user.'
+        });
+    }
+}
+
 /**
  * Gets a user by id or all of them
  * @param {*} req 
@@ -114,7 +139,7 @@ const userPatch = (req, res) => {
  */
 const userDelete = (req, res) => {
     if(req.query && req.query.id){
-        User.findByIdAndRemove(req.query.id, function (err, user){
+        User.findByIdAndRemove(req.query.id, function (err){
             if(err){
                 res.status(500);
                 console.log('Error while queryting the user');
@@ -133,6 +158,7 @@ const userDelete = (req, res) => {
 
 module.exports = {
     userPost,
+    login,
     userGet,
     userPatch,
     userDelete
