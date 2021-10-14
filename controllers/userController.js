@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const randomToken = require('random-token');
 
 /**
  * Creates a new user
@@ -52,7 +53,10 @@ const login = (req, res) => {
                     error: 'User doesnt exist'
                 });
             }
-            res.json(user);
+            if(user != ""){
+                var token = randomToken(16);
+            }
+            res.json({user, token});
         });
     }else{
         res.status(422);

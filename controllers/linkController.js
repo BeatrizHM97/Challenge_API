@@ -140,7 +140,6 @@ const sumVisit = (req, res) => {
                 });
             }
             link.visits += 1;
-
             link.save(function (err){
                 if(err){
                     res.status(422);
